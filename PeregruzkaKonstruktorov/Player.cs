@@ -13,13 +13,14 @@ namespace PeregruzkaKonstruktorov
 {
     public class Player
     {
-        public string Name { get; private set; }
+        public string Name { get; set; }
         public string NickName { get; private set; }
         public int Level { get; protected set; }
         public int AttackPower { get; private set; } = 5;
         public int MagicAttackPower { get; private set; } = 5;
         public int RangeAttackPower { get; private set; } = 5;
-        public int Health { get; protected set; } 
+        public int Health { get; protected set; }
+        public int Distance { get; protected set; } = 0;
         private const int HealsPoints = 100;
 
         public Player() { }
@@ -36,7 +37,16 @@ namespace PeregruzkaKonstruktorov
             this.NickName = nickname;
             SetLevel(level);
         }
+
+        public Player(string nickname, int level, int distance) : this(nickname, level)
+        {
+            Distance= distance;
+        }
         
+        public virtual int Power()
+        {
+            return this.Health;
+        }
         public void SetName(string name)
         {
 
@@ -177,7 +187,17 @@ namespace PeregruzkaKonstruktorov
             return "\n" +  "Ваш Никнейм: " + NickName + "\n" + "Ваш уровень: " + Level +"\n"+ "Ваше здоровье:"+Health;
         }
 
-        
+        public virtual int GetCloser(int step)
+        {
+
+            this.Distance -= step;
+            return step;
+        }
+        public virtual int DistancePlayer()
+        {
+
+            return Distance;
+        }
         public virtual int Attack(Enemy enemy)
         {
             return enemy.TakeDamage(AttackPower);
@@ -188,7 +208,7 @@ namespace PeregruzkaKonstruktorov
         }
         public virtual int TakeDamage(int value)
         {
-            this.Health = this.Health - value;
+            this.Health -= value;
             return value;
         }
         public int GetStatus()
@@ -206,6 +226,14 @@ namespace PeregruzkaKonstruktorov
                 return Health;
             }
         }
-        
+        public virtual int AbilityActive()
+        {
+            return AbilityActive();
+        }
+        public virtual int AbilityAPassive()
+        {
+            return AbilityAPassive();
+        }
+
     }
 }

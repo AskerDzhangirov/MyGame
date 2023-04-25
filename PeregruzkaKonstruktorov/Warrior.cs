@@ -13,14 +13,23 @@ namespace PeregruzkaKonstruktorov
         private const int HealsPoints = 200;
         public int Rage { get; private set; } = 50;
         public int Protection { get; private set; } = 5;
+      
+
+        public Warrior()
+        {
+
+        }
 
 
-
-
-        public Warrior(string nickname, int level, int rage, int protection) : base(nickname, level) 
+        public Warrior(string nickname, int level, int rage, int protection, int distance) : base(nickname, level, distance) 
         {
             Rage = rage;
             Protection = protection;
+            Distance = distance;
+        }
+        public override int DistancePlayer()
+        {
+            return Distance;
         }
         public Warrior(string nickname, int level) : base(nickname, level) 
         {
@@ -43,8 +52,7 @@ namespace PeregruzkaKonstruktorov
         }
         public void SetProtection(int value) 
         {
-            this.Level = value;
-            Protection = value * Protection;
+          
        
         }
         public override string MyFulllName()
@@ -68,7 +76,7 @@ namespace PeregruzkaKonstruktorov
             }
             else
             {
-                this.Rage = Rage - 10;
+                this.Rage = Rage - 5;
                 return enemy.TakeDamage(AttackPower);
             }
            
@@ -94,18 +102,30 @@ namespace PeregruzkaKonstruktorov
 
             // чтобы восстановить ярость в размере 5 единиц, нужно пропустить ход.
         }
-        public int RageRecovery()
-        {   if (this.Rage < 50)
+       
+        public override int AbilityActive()
+        {
+            if (this.Rage < 50)
             {
                 this.Rage = Rage + 5;
-                return Rage; 
+                return Rage;
             }
 
             else
             {
                 Console.WriteLine("Вам не требуется отдых для восстановления Ярости.");
-                return Rage; 
+                return Rage;
             }
+        }
+        public override int AbilityAPassive()
+        {
+          
+            Protection = this.Level * Protection;
+            return Protection;
+        }
+        public override int Power()
+        {
+            return Rage;
         }
 
     }

@@ -10,11 +10,20 @@ namespace PeregruzkaKonstruktorov
     {
         public  int Evasion { get; private set; } 
         public int Energy { get; private set; } = 100;
+        public new int Distance { get; private set; } = 4;
         
-        public Hawkeye(string nickname, int level, int evasion, int energy) : base(nickname, level) 
+        
+        
+
+        public Hawkeye()
+        {
+
+        }
+        public Hawkeye(string nickname, int level, int evasion, int energy, int distance) : base(nickname, level, distance) 
         {
             Evasion = evasion;
             Energy = energy;
+       
         }
 
         public Hawkeye(string nickname, int level) : base(nickname, level)
@@ -24,8 +33,21 @@ namespace PeregruzkaKonstruktorov
             SetNickName(nickname);
 
         }
-        public int SetEvasion()
+        public override int GetCloser(int value)
         {
+
+            this.Distance -= value;
+            return value;
+        }
+        public override int DistancePlayer()
+        {
+
+            //this.Distance += 5;
+            return this.Distance;
+        }
+        public override int AbilityAPassive()
+        {
+        
             Random random = new Random();
             int chance = random.Next(0, 100);
             //Console.WriteLine($"Рандом: {chance}");
@@ -35,10 +57,10 @@ namespace PeregruzkaKonstruktorov
             
             
             
-        public override int TakeDamage(int value)
+        public override int TakeDamage(int step)
         {
-            this.Health -= value;
-            return value;
+            this.Health -= step;
+            return step;
         }
 
 
@@ -94,7 +116,7 @@ namespace PeregruzkaKonstruktorov
 
             // чтобы восстановить ярость в размере 5 единиц, нужно пропустить ход.
         }
-        public int EnergyRecovery()
+        public override int AbilityActive()
         {
             if (this.Energy < 50)
             {
@@ -108,6 +130,10 @@ namespace PeregruzkaKonstruktorov
                 return Energy;
             }
         }
-        
+        public override int Power()
+        {
+            return this.Energy;
+        }
+
     }
 }

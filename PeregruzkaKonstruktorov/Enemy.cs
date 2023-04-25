@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Remoting.Messaging;
@@ -9,26 +10,25 @@ using System.Threading.Tasks;
 namespace PeregruzkaKonstruktorov
 {
 
-    public class Enemy
+    public class Enemy 
     {
-
-        public Enemy()
-        {
-
-        }
-        public string Name { get; private set; }
+             
+        public Enemy() { }
+        public string Name { get; set; }
         public int Level { get; private set; }
-        public int Health { get; private set; }
+        public int Health { get; private set; } 
         public int AttackPower { get; private set; } = 10;
+        public int Jerk { get; private set; } = 0;
 
 
         private const int lightMobs = 10;
 
-        public Enemy(string name, int level, int health)
+        public Enemy(string name, int level, int health, int jerk)
         {
             Name = name;
             SetLevel(level);
             Health = health;
+            Jerk = jerk;
 
         }
         public Enemy(string name, int level)
@@ -37,7 +37,8 @@ namespace PeregruzkaKonstruktorov
             SetLevel(level);
 
         }
-        public void SetName(string name)
+        public Enemy(int level) { }
+        public virtual void SetName(string name)
 
         {
             if (!ChekOfName(name))
@@ -46,6 +47,10 @@ namespace PeregruzkaKonstruktorov
                 Console.WriteLine($"Имя врага: {name}");
             this.Name = name;
 
+        }
+        public virtual string EnemyName()
+        {
+           return Name;
         }
 
         private bool ChekOfName(string name)
@@ -88,7 +93,7 @@ namespace PeregruzkaKonstruktorov
             return this.Level;
         }
 
-        public string GetName()
+        public virtual string GetName()
         {
             return this.Name;
 
@@ -119,7 +124,7 @@ namespace PeregruzkaKonstruktorov
         {
             if (this.Health <= 0)
             {
-                Console.WriteLine($"Wolf Мертв. ");
+                Console.WriteLine($"Враг Мертв. ");
                 return this.Health;
             }
 
@@ -133,8 +138,14 @@ namespace PeregruzkaKonstruktorov
         }
         public int TakeDamage(int value)
         {
-            this.Health = this.Health - value;
+            this.Health -= value;
             return value;
+        }
+        public virtual int EnemyActiveAbility(Player player)
+        {
+            return player.GetCloser(Jerk) ; 
+
+            
         }
         public int Attack(Player player)
         {
@@ -144,6 +155,16 @@ namespace PeregruzkaKonstruktorov
         {
             return player.TakeDamage(AttackPower * 2);
         }
+        public virtual int EnemyPassiveAbility(Player player)
+        {
+            return this.Health;
+        }
+        
+       
+
+
+
+
         //public int StepByStep()
         //{
         //    int step;
